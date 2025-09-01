@@ -1,9 +1,14 @@
 import * as restify from "restify";
+import * as mongoose from "mongoose";
 import { Router } from "../common/router";
 import { environment } from "../common/environment";
 
 export class Server {
   application: restify.createServer;
+
+  async initializeDb() {
+    return mongoose.connect(environment.db.url);
+  }
 
   async initRoutes(router: Router[]): Promise<any> {
     try {
@@ -47,6 +52,7 @@ export class Server {
    *
    */
   async bootstrap(router: Router[] = []): Promise<Server> {
+    await this.initializeDb();
     await this.initRoutes(router);
     return this;
   }
