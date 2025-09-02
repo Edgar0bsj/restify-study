@@ -51,7 +51,22 @@ class UsersRouter extends Router {
      *
      */
     application.patch("/user/:id", (req, res, next) => {
+      /**
+       * Define um objeto de opções para o método do Mongoose.
+       * new: true significa que, após a atualização, o método
+       * deve retornar o documento já atualizado em vez do documento antigo.
+       */
       const options = { new: true };
+      /**
+       *
+       * Usa o modelo User do Mongoose para encontrar e atualizar um documento no banco.
+       * findByIdAndUpdate recebe três argumentos:
+       * @param req.params.id → o ID do usuário passado na URL (/user/:id).
+       * @param req.body → os dados a serem atualizados (que já foram tratados pelo seu parser mergePatchBodyParser).
+       * @param options → configuração (new: true) para devolver o documento atualizado.
+       * @returns retorna uma Promise, por isso é encadeado com .then.
+       *
+       */
       User.findByIdAndUpdate(req.params.id, req.body, options).then((user) => {
         if (user) {
           res.json(user);
