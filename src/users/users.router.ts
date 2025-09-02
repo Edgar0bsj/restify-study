@@ -10,7 +10,7 @@ class UsersRouter extends Router {
      *
      */
     application.get("/users", (req, res, next) => {
-      User.findAll().then((users) => {
+      User.find().then((users) => {
         res.json(users);
         return next();
       });
@@ -31,6 +31,35 @@ class UsersRouter extends Router {
         res.send(404);
         return next();
       }
+    });
+    /**
+     *
+     * @description: endpont para enviar um documento ao bando de dados
+     *
+     */
+    application.post("/users", (req, res, next) => {
+      let user = new User(req.body);
+      user.save().then((user) => {
+        user.password = undefined;
+        res.json(user);
+        return next();
+      });
+    });
+    /**
+     *
+     * @description: endpont que atualizar parcialmente dados no banco
+     *
+     */
+    application.patch("/user/:id", (req, res, next) => {
+      const options = { new: true };
+      User.findByIdAndUpdate(req.params.id, req.body, options).then((user) => {
+        if (user) {
+          res.json(user);
+          return next();
+        }
+        res.send(404);
+        return next();
+      });
     });
   }
 }
