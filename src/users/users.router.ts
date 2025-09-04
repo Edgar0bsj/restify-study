@@ -50,7 +50,7 @@ class UsersRouter extends Router {
      * @description: endpont que atualizar parcialmente dados no banco
      *
      */
-    application.patch("/user/:id", (req, res, next) => {
+    application.patch("/users/:id", (req, res, next) => {
       /**
        * Define um objeto de opções para o método do Mongoose.
        * new: true significa que, após a atualização, o método
@@ -74,6 +74,16 @@ class UsersRouter extends Router {
         }
         res.send(404);
         return next();
+      });
+    });
+    /**
+     *
+     * @description: endpont que deleta um registro do banco
+     *
+     */
+    application.del("/users/:id", (req, res, next) => {
+      User.deleteOne({ _id: req.params.id }).then((result) => {
+        return res.send(result);
       });
     });
   }
